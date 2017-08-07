@@ -1,7 +1,11 @@
 import json
+from math import sqrt
 import operator
 import os
 import sys
+
+
+SECOND_ITEM = 1
 
 
 def load_data(filepath):
@@ -27,22 +31,21 @@ def get_bars_with_seats_count(jsn_data):
 def get_biggest_bar(jsn_data):
     return max(
             get_bars_with_seats_count(jsn_data),
-            key=operator.itemgetter(1)
+            key=operator.itemgetter(SECOND_ITEM)
             )[0]
 
 
 def get_smallest_bar(jsn_data):
     return min(
             get_bars_with_seats_count(jsn_data),
-            key=operator.itemgetter(1)
+            key=operator.itemgetter(SECOND_ITEM)
             )[0]
 
 
 def calc_dist_to_bar(longitude_a, latitude_a, longitude_b, latitude_b):
-    return pow(
+    return sqrt(
                 (pow((longitude_a - longitude_b), 2) +
                  pow((latitude_a - latitude_b), 2)),
-                0.5
                 )
 
 
@@ -59,7 +62,7 @@ def get_bars_with_dists(jsn_data, longitude, latitude):
 def get_closest_bar(jsn_data, longitude, latitude):
     return min(
             get_bars_with_dists(jsn_data, longitude, latitude),
-            key=operator.itemgetter(1)
+            key=operator.itemgetter(SECOND_ITEM)
             )[0]
 
 
@@ -74,7 +77,8 @@ if __name__ == '__main__':
     try:
         longitude = float(input('Enter longitude:  '))
         latitude = float(input('Enter latitude:  '))
-    except Exception:
+    except ValueError as e:
+        print('You have to enter digits')
         print('Example: Enter longitude:  38.9')
         print('Example: Enter latitude:  56.618')
         sys.exit()
