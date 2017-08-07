@@ -5,86 +5,83 @@ import os
 import sys
 
 
-SECOND_ITEM = 1
+def calc_distance(longitude_from, latitude_from, longitude_to, latitude_to):
+    return sqrt(
+                (pow((longitude_from - longitude_to), 2) +
+                 pow((latitude_from - latitude_to), 2)),
+                )
+
+
+def get_biggest_bar_json(bars_json):
+    return max(
+            [(bar, bar['SeatsCount']) for bar in bars_json],
+            key=operator.itemgetter(1)
+            )[0]
+
+
+def get_closest_bar_json(bars_json, local_longitude, local_latitude):
+    return min(
+            [(bar, calc_distance(
+                                local_longitude,
+                                local_latitude,
+                                float(bar['Longitude_WGS84']),
+                                float(bar['Latitude_WGS84'])))
+             for bar in bars_json],
+            key=operator.itemgetter(1)
+            )[0]
+
+
+def get_smallest_bar_json(bars_json):
+    return min(
+            [(bar, bar['SeatsCount']) for bar in bars_json],
+            key=operator.itemgetter(1)
+            )[0]
 
 
 def load_data(filepath):
     if not os.path.exists(filepath):
-        return None
+        print('filepath does not exist')
+        sys.exit()
     with open(filepath, 'r', encoding='cp1251') as file_handler:
         return json.load(file_handler)
 
 
-def prettify_json(jsn_data):
+def prettify_json(json_data):
     return json.dumps(
-                    jsn_data,
+                    json_data,
                     indent=4,
                     sort_keys=True,
                     ensure_ascii=False
                     )
 
 
-def get_bars_with_seats_count(jsn_data):
-    return [(bar, bar['SeatsCount']) for bar in jsn_data]
+def print_results(biggest_bar_json, smallest_bar_json, closest_bar_json):
+    print('\nBiggest BAR:\n {}\n'.format(prettify_json(biggest_bar_json)))
+    print('Smallest BAR:\n {}\n'.format(prettify_json(smallest_bar_json)))
+    print('Closest BAR:\n {}\n'.format(prettify_json(closest_bar_json)))
 
 
-def get_biggest_bar(jsn_data):
-    return max(
-            get_bars_with_seats_count(jsn_data),
-            key=operator.itemgetter(SECOND_ITEM)
-            )[0]
-
-
-def get_smallest_bar(jsn_data):
-    return min(
-            get_bars_with_seats_count(jsn_data),
-            key=operator.itemgetter(SECOND_ITEM)
-            )[0]
-
-
-def calc_dist_to_bar(longitude_a, latitude_a, longitude_b, latitude_b):
-    return sqrt(
-                (pow((longitude_a - longitude_b), 2) +
-                 pow((latitude_a - latitude_b), 2)),
+def prompt_local_coordinates():
+    try:
+        return (
+                float(input('Enter longitude:  ')),
+                float(input('Enter latitude:  '))
                 )
-
-
-def get_bars_with_dists(jsn_data, longitude, latitude):
-    return [(bar, calc_dist_to_bar(
-                                    longitude,
-                                    latitude,
-                                    float(bar['Longitude_WGS84']),
-                                    float(bar['Latitude_WGS84'])))
-            for bar in jsn_data
-            ]
-
-
-def get_closest_bar(jsn_data, longitude, latitude):
-    return min(
-            get_bars_with_dists(jsn_data, longitude, latitude),
-            key=operator.itemgetter(SECOND_ITEM)
-            )[0]
+    except ValueError as e:
+        print('You have enter digits')
+        print('Example: Enter local longitude:  38.9')
+        print('Example: Enter local latitude:  56.618')
+        sys.exit()
 
 
 if __name__ == '__main__':
     if not len(sys.argv) > 1:
-        print('\nEnter: python3 bars.py "filepath"\n')
-    filepath = sys.argv[1]
-    jsn_data = load_data(filepath)
-    if not jsn_data:
-        print('filepath does not exist')
-        sys.exit()
-    try:
-        longitude = float(input('Enter longitude:  '))
-        latitude = float(input('Enter latitude:  '))
-    except ValueError as e:
-        print('You have to enter digits')
-        print('Example: Enter longitude:  38.9')
-        print('Example: Enter latitude:  56.618')
-        sys.exit()
-    biggest_bar = get_biggest_bar(jsn_data)
-    smallest_bar = get_smallest_bar(jsn_data)
-    closest_bar = get_closest_bar(jsn_data, longitude, latitude)
-    print('\nThe biggest BAR is:\n {}\n'.format(prettify_json(biggest_bar)))
-    print('The smallest BAR is:\n {}\n'.format(prettify_json(smallest_bar)))
-    print('The closest BAR is:\n {}\n'.format(prettify_json(closest_bar)))
+        print('\nEnter: python3 bars.py "filepath/to/moscow_bars_json"\n')
+    filepath_to_moscow_bars_json = sys.argv[1]
+    bars_json = load_data(filepath_to_moscow_bars_json)
+    local_longitude, local_latitude = prompt_local_coordinates()
+    print_results(
+            get_biggest_bar_json(bars_json),
+            get_smallest_bar_json(bars_json),
+            get_closest_bar_json(bars_json, local_longitude, local_latitude)
+            )
