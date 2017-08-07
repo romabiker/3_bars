@@ -77,6 +77,7 @@ def prompt_local_coordinates():
 if __name__ == '__main__':
     if not len(sys.argv) > 1:
         print('\nEnter: python3 bars.py "filepath/to/moscow_bars_json"\n')
+        sys.exit()
     filepath_to_moscow_bars_json = sys.argv[1]
     bars_json = load_data(filepath_to_moscow_bars_json)
     local_longitude, local_latitude = prompt_local_coordinates()
