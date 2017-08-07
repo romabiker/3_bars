@@ -9,9 +9,9 @@ Example of script launch on Linux, Python 3.5:
 ```
 $ python3 bars.py bars.json 
 Enter longitude:  38
-Enter latitude:  57
+Enter latitude:  60
 
-The biggest BAR is:
+Biggest BAR:
  {
     "Address": "Автозаводская улица, дом 23, строение 1",
     "AdmArea": "Южный административный округ",
@@ -43,7 +43,7 @@ The biggest BAR is:
     "system_object_id": "00138530"
 }
 
-The smallest BAR is:
+Smallest BAR:
  {
     "Address": "Дубравная улица, дом 34/29",
     "AdmArea": "Северо-Западный административный округ",
@@ -75,38 +75,37 @@ The smallest BAR is:
     "system_object_id": "00107283"
 }
 
-The closest BAR is:
+Closest BAR:
  {
-    "Address": "город Зеленоград, корпус 315",
+    "Address": "2-й Западный проезд, дом 2",
     "AdmArea": "Зеленоградский административный округ",
-    "District": "район Савёлки",
-    "ID": "00144982",
+    "District": "район Матушкино",
+    "ID": "000019665",
     "IsNetObject": "нет",
-    "Latitude_WGS84": "55.9175687313618820",
-    "Longitude_WGS84": "37.7442349738896180",
-    "Name": "Гудсон бар",
+    "Latitude_WGS84": "56.0049375038432440",
+    "Longitude_WGS84": "37.1948519108885450",
+    "Name": "Бар «Адамов Роман Анатольевич»",
     "PublicPhone": [
         {
-            "PublicPhone": "(499) 740-97-58",
-            "global_id": 35010.0,
-            "global_object_id": 281494735.0,
-            "system_object_id": "00144982 _1"
+            "PublicPhone": "(000) 000-00-00",
+            "global_id": 24337.0,
+            "global_object_id": 20730952.0,
+            "system_object_id": "000019665_1"
         }
     ],
-    "SeatsCount": 30,
+    "SeatsCount": 24,
     "SocialPrivileges": "нет",
     "TypeObject": "бар",
     "geoData": {
         "coordinates": [
-            37.744234974114,
-            55.917568731248
+            37.19485191132574,
+            56.004937503644214
         ],
         "type": "Point"
     },
-    "global_id": 281494735,
-    "system_object_id": "00144982"
+    "global_id": 20730952,
+    "system_object_id": "000019665"
 }
-
 ```
 
 Launch on Windows is the same.
