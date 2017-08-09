@@ -5,36 +5,42 @@ import os
 import sys
 
 
-def calc_distance(longitude_from, latitude_from, longitude_to, latitude_to):
+def calc_distance(longitude_from,
+                  latitude_from,
+                  longitude_to,
+                  latitude_to):
     return sqrt(
                 (pow((longitude_from - longitude_to), 2) +
                  pow((latitude_from - latitude_to), 2)),
                 )
 
 
-def get_biggest_bar_json(bars_json):
+def get_biggest_bar_json(bars_json, second_item=1):
     return max(
             [(bar, bar['SeatsCount']) for bar in bars_json],
-            key=operator.itemgetter(1)
+            key=operator.itemgetter(second_item)
             )[0]
 
 
-def get_closest_bar_json(bars_json, local_longitude, local_latitude):
+def get_closest_bar_json(bars_json,
+                        local_longitude,
+                        local_latitude,
+                        second_item=1):
     return min(
             [(bar, calc_distance(
-                                local_longitude,
-                                local_latitude,
-                                float(bar['Longitude_WGS84']),
-                                float(bar['Latitude_WGS84'])))
+                    local_longitude,
+                    local_latitude,
+                    float(bar['Longitude_WGS84']),
+                    float(bar['Latitude_WGS84'])))
              for bar in bars_json],
-            key=operator.itemgetter(1)
+            key=operator.itemgetter(second_item)
             )[0]
 
 
-def get_smallest_bar_json(bars_json):
+def get_smallest_bar_json(bars_json, second_item=1):
     return min(
             [(bar, bar['SeatsCount']) for bar in bars_json],
-            key=operator.itemgetter(1)
+            key=operator.itemgetter(second_item)
             )[0]
 
 
